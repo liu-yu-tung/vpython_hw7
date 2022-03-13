@@ -40,19 +40,3 @@ for i in range(0, N):
 #find Q, find C_nonideal = Q/(delta V)
 #Compare C_nonideal to C_ideal
 
-
-dA = h*1
-Total_Ex = 0
-Total_Ey = 0
-
-for i in range(25, 76) :
-    Total_Ey = Total_Ey - Ey[i][int(N/2)] + Ey[i][int(N/2) + int(d/a)]
-for j in range(int(N/2), int(N/2) + int(d/h)+1):
-    Total_Ey = Total_Ex - Ex[25][j] + Ex[76][j]
-
-Q_enclosed = (Total_Ex + Total_Ey) * dA * epsilon
-C_nonideal = Q_enclosed / V0
-
-print("C_nonideal" , C_nonideal, "(F)")
-print("The error percentage among this and ideal is", \
-        (C_nonideal/(L*epsilon/d) -1)*100, "%")
