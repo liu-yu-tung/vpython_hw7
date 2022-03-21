@@ -11,7 +11,7 @@ def solve_laplacian(u, u_cond, h, Niter=5000):
     V = array(u)
     for i in range(Niter):
         V[u_cond] = u[u_cond]
-        V[1:-1, 1:-1] = 0 # replace this 0 by your Laplacian Solver
+        V[1:-1, 1:-1] = 0.25*(V[:-2, 1:-1] + V[2:, 1:-1] + V[1:-1, :-2] + V[1:-1, 2:]) # replace this 0 by your Laplacian Solver
     return V
 
 def get_field(V, h):
@@ -27,6 +27,7 @@ scene = canvas(title='non-ideal capacitor', height=1000, width=1000, center = ve
 scene.lights = []
 scene.ambient=color.gray(0.99)
 box(pos = vec(N*h/2 , N*h/2 - d/2 - h , 0), length = L, height = h/5, width = h)
+
 box(pos = vec(N*h/2 , N*h/2 + d/2 - h , 0), length = L, height = h/5, width = h)
 for i in range(N):
     for j in range(N):
@@ -37,22 +38,26 @@ Ex, Ey = get_field(V, h)
 for i in range(0, N):
     for j in range(0, N):
         ar = arrow(pos = vec( i*h, j*h, h/10), axis =vec (Ex[i,j]/2E9, Ey[i,j]/2E9, 0), shaftwidth = h/6.0, color=color.black)
-#find Q, find C_nonideal = Q/(delta V)
+# find Q, find C_nonideal = Q/(delta V)
 #Compare C_nonideal to C_ideal
 
-
-dA = h*1
+dA = h
 Total_Ex = 0
 Total_Ey = 0
 
-for i in range(25, 76) :
-    Total_Ey = Total_Ey - Ey[i][int(N/2)] + Ey[i][int(N/2) + int(d/a)]
-for j in range(int(N/2), int(N/2) + int(d/h)+1):
-    Total_Ey = Total_Ex - Ex[25][j] + Ex[76][j]
+for i in range(25, 76):
+    Total_Ey = Total_Ey - Ey[i][int(N/2)] + Ey[i][int(N/2) + int(d/h)]
+for j in range(int(N/2), int(N/2)+int(d/h)+1):
+    Total_Ex = Total_Ex - Ex[25][j] + Ex[76][j]
 
 Q_enclosed = (Total_Ex + Total_Ey) * dA * epsilon
-C_nonideal = Q_enclosed / V0
+C_nonideal = Q_enclosed/V0
 
-print("C_nonideal" , C_nonideal, "(F)")
-print("The error percentage among this and ideal is", \
-        (C_nonideal/(L*epsilon/d) -1)*100, "%")
+print("C_nonideal = ", C_nonideal, " (F)")
+print("error percentage is ", \
+        C_nonideal/(L*epsilon/d -1)*100, '%')
+
+
+
+
+
