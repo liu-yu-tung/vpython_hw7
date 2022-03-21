@@ -53,11 +53,7 @@ for j in range(int(N/2), int(N/2)+int(d/h)+1):
 Q_enclosed = (Total_Ex + Total_Ey) * dA * epsilon
 C_nonideal = Q_enclosed/V0
 
-print("C_nonideal = ", C_nonideal, " (F)")
-print("error percentage is ", \
+print("C_nonideal = ", C_nonideal, " F")
+print("error percentage compared to ideal", \
         C_nonideal/(L*epsilon/d -1)*100, '%')
-
-
-
-
 
